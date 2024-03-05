@@ -4,6 +4,11 @@ Shader "Unlit/EnvironmentShader"
     {
         _MainTex ("Texture", 2D) = "white" {}
         _NoiseTex("Noise Texture", 2D) = "white" {}
+        _AberrationATex("AberrationATex", 2D) = "white" {}
+        _AberrationBTex("AberrationBTex", 2D) = "white" {}
+        _AberrationCTex("AberrationCTex", 2D) = "white" {}
+        _AberrationDTex("AberrationDTex", 2D) = "white" {}
+        _AberrationETex("AberrationETex", 2D) = "white" {}
     }
     SubShader
     {
@@ -20,6 +25,7 @@ Shader "Unlit/EnvironmentShader"
 
             #include "UnityCG.cginc"
             #include "noiseSimplex.cginc"
+            #include "RaymarchingSDFs.cginc"
 
             struct appdata
             {
@@ -65,124 +71,91 @@ Shader "Unlit/EnvironmentShader"
                 return o;
             }
 
-            //Referenced this wonderful page for help on the basics SDF's because i keep forgetting them
-            // https://iquilezles.org/articles/distfunctions/
 
-            //SDFS from iquellez
-            float sdSphere(float3 p, float s )
-            {
-                return length(p)-s;
-            }
-
-            float sdBox(float3 p, float3 b )
-            {
-                float3 q = abs(p) - b;
-                return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0);
-            }
-
-            float sdRoundBox(float3 p, float3 b, float r )
-            {
-                float3 q = abs(p) - b + r;
-                return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0) - r;
-            }
-
-            float sdBoxFrame(float3 p, float3 b, float e )
-            {
-                p = abs(p  )-b;
-                float3 q = abs(p+e)-e;
-                return min(min(
-                    length(max(float3(p.x,q.y,q.z),0.0))+min(max(p.x,max(q.y,q.z)),0.0),
-                    length(max(float3(q.x,p.y,q.z),0.0))+min(max(q.x,max(p.y,q.z)),0.0)),
-                    length(max(float3(q.x,q.y,p.z),0.0))+min(max(q.x,max(q.y,p.z)),0.0));
-            }
-
-            float sdTorus(float3 p, float2 t )
-            {
-                float2 q = float2(length(p.xz)-t.x,p.y);
-                return length(q)-t.y;
-            }
-
-            float sdCone(float3 p, float2 c, float h )
-            {
-              float q = length(p.xz);
-              return max(dot(c.xy,float2(q,p.y)),-h-p.y);
-            }
-
-            float sdOctahedron(float3 p, float s)
-            {
-              p = abs(p);
-              return (p.x+p.y+p.z-s)*0.57735027;
-            }
-
-            //Combiners from iquellez
-            float opUnion( float d1, float d2 )
-            {
-                return min(d1,d2);
-            }
-            float opSubtraction( float d1, float d2 )
-            {
-                return max(-d1,d2);
-            }
-            float opIntersection( float d1, float d2 )
-            {
-                return max(d1,d2);
-            }
-            float opXor(float d1, float d2 )
-            {
-                return max(min(d1,d2),-max(d1,d2));
-            }
-            
-            float opSmoothUnion( float d1, float d2, float k )
-            {
-                float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
-                return lerp( d2, d1, h ) - k*h*(1.0-h);
-            }
-
-            float opSmoothSubtraction( float d1, float d2, float k )
-            {
-                float h = clamp( 0.5 - 0.5*(d2+d1)/k, 0.0, 1.0 );
-                return lerp( d2, -d1, h ) + k*h*(1.0-h);
-            }
-
-            float opSmoothIntersection( float d1, float d2, float k )
-            {
-                float h = clamp( 0.5 - 0.5*(d2-d1)/k, 0.0, 1.0 );
-                return lerp( d2, d1, h ) + k*h*(1.0-h);
-            }
-            
+            //Aberration Textures
+            sampler2D _AberrationATex;
+            sampler2D _AberrationBTex;
+            sampler2D _AberrationCTex;
+            sampler2D _AberrationDTex;
+            sampler2D _AberrationETex;
             
             //Aberrations
-
             float AberrationA(float3 p)
             {
-                return sdSphere(p,1);
+                p = opTwistY(p, sin(_Time.y) + 2);
+                return sdOctahedron(p,1);
             }
 
             float AberrationB(float3 p)
             {
-                return sdOctahedron(p,2);
+                float boundingSphere = sdSphere(p, 2);
+                if(boundingSphere > 1) return boundingSphere;
+                float dstA = sdSphere(p - float3(sin(_Time.y),sin(_Time.z * 0.25),sin(_Time.y * 2)), 0.2);
+                float dstB = sdSphere(p - float3(sin(_Time.y * 0.25),sin(_Time.y * 2),sin(_Time.z)), 0.2);
+                float dstC = sdSphere(p, 0.4);
+                float combinedDst = opSmoothUnion(dstA,opSmoothUnion(dstB,dstC,1.5),1.5);
+                return combinedDst;
             }
             
-            float SceneSDF(float3 p)
+            float AberrationC(float3 p)
+            {
+                float boundingSphere = sdSphere(p, 2);
+                if(boundingSphere > 1) return boundingSphere;
+                float dstA = sdSphere(p, 1.5);
+                p = opTwistZ(p, sin(_Time.y));
+                p = opTwistX(p, sin((_Time.y + 1.5) * 2));
+                p = opTwistY(p, sin(_Time.y * 4));
+                return opSmoothSubtraction(dstA,sdBox(p,float3(1.5,1.5,1.5)),1);
+            }
+
+            float AberrationD(float3 p)
+            {
+                float boundingSphere = sdSphere(p, 2);
+                if(boundingSphere > 1) return boundingSphere;
+                float dstA = sdSphere(p - float3(sin(_Time.y),sin(_Time.z * 0.25),sin(_Time.y * 2)), 0.2);
+                float dstB = sdSphere(p - float3(sin(_Time.y * 0.25),sin(_Time.y * 2),sin(_Time.z)), 0.2);
+                float dstC = sdSphere(p, 0.4);
+                float combinedDst = opSmoothUnion(dstA,opSmoothUnion(dstB,dstC,1.5),1.5);
+                return combinedDst;
+            }
+
+            float AberrationE(float3 p)
+            {
+                float boundingSphere = sdSphere(p, 2);
+                if(boundingSphere > 1) return boundingSphere;
+                float dstA = sdSphere(p - float3(sin(_Time.y),sin(_Time.z * 0.25),sin(_Time.y * 2)), 0.2);
+                float dstB = sdSphere(p - float3(sin(_Time.y * 0.25),sin(_Time.y * 2),sin(_Time.z)), 0.2);
+                float dstC = sdSphere(p, 0.4);
+                float combinedDst = opSmoothUnion(dstA,opSmoothUnion(dstB,dstC,1.5),1.5);
+                return combinedDst;
+            }
+            
+            float2 SceneSDF(float3 p)
             {
                 float dst = 10000;
+                int returnAberrationType = -1;
                 for(int i = 0; i < _AberrationCount; i++)
                 {
                     float scale = _Aberrations[i].scale * 0.5;
                     float3 localP = (p - _Aberrations[i].position) / scale;
+                    float oldDst = dst;
                     switch (_Aberrations[i].id)
                     {
                         case 0: dst = min(dst,AberrationA(localP) * scale); break;
                         case 1: dst = min(dst,AberrationB(localP) * scale); break;
+                        case 2: dst = min(dst,AberrationC(localP) * scale); break;
+                        case 3: dst = min(dst,AberrationD(localP) * scale); break;
+                        case 4: dst = min(dst,AberrationE(localP) * scale); break;
                         default: break;
                     }
+                    if(dst != oldDst) returnAberrationType = _Aberrations[i].id;
                 }
-                return dst;
+                return float2(dst, returnAberrationType);
             }
 
             float3 SceneNormal(float3 p)
             {
-                float epsilon = 0.00001;
+                float epsilon = 0.0001;
                 float centerDistance = SceneSDF(p);
                 float xDistance = SceneSDF(p + float3(epsilon, 0, 0));
                 float yDistance = SceneSDF(p + float3(0, epsilon, 0));
@@ -210,16 +183,20 @@ Shader "Unlit/EnvironmentShader"
                 float travelled = 0;
                 int stepCount = 0;
                 bool hit = false;
+                float dotNL = 0;
+                int hitType = -1;
                 for(int i = 0; i < 500; i++)
                 {
                     float3 p = rayOrigin + rayDir * travelled;
-                    float d = SceneSDF(p);
+                    float2 dt = SceneSDF(p);
+                    float d = dt.x;
                     if(d < 0.001f)
                     {
+                        hitType = int(dt.y);
                         float3 normal = SceneNormal(p);
-                        
-                        col.rgb = dot(normal, _WorldSpaceLightPos0) * 0.5 + 0.5;
-                        o.depth = LinearToDepth(distance(p, rayOrigin));
+                        dotNL = dot(normal, _WorldSpaceLightPos0) * 0.5 + 0.5;
+                        float finalDepth = LinearToDepth(distance(p, rayOrigin + rayDir * 0.02));
+                        o.depth = finalDepth;
                         hit = true;
                         break;
                     }
@@ -228,7 +205,19 @@ Shader "Unlit/EnvironmentShader"
                         break;
                     }
                     travelled += d;
+                    stepCount++;
                 }
+                switch(hitType)
+                {
+                    case 0: col.rgb = tex2D(_AberrationATex, float2(dotNL, 0.5)).rgb; break;
+                    case 1: col.rgb = tex2D(_AberrationBTex, float2(dotNL, 0.5)).rgb; break;
+                    case 2: col.rgb = tex2D(_AberrationCTex, float2(dotNL, 0.5)).rgb; break;
+                    case 3: col.rgb = tex2D(_AberrationDTex, float2(dotNL, 0.5)).rgb; break;
+                    case 4: col.rgb = tex2D(_AberrationETex, float2(dotNL, 0.5)).rgb; break;
+                    default: break;
+                }
+                float glow = stepCount / 30.0f;
+                col.rgb += pow(clamp(glow,0,1),2) * 0; //TODO: FIX THIS SHIT LATER
                 o.color = col;
                 if(!hit) o.depth = LinearToDepth(900);
                 return o;

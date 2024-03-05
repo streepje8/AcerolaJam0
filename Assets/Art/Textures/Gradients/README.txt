@@ -1,0 +1,1 @@
+All gradients in this folder are made using https://ajalt.github.io/colormath/gradient/
