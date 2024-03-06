@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -18,10 +19,12 @@ public struct AberrationStruct
     public int id;
 }
 
+[ExecuteAlways]
 [RequireComponent(typeof(BoxCollider))]
 public class Aberration : MonoBehaviour
 {
     [field: SerializeField]public AberrationType Type { get; private set; }
+    [field: SerializeField]public string AberrationName { get; private set; }
     [field: SerializeField]public AudioClip NavigationCommandAudio { get; private set; }
     [field: SerializeField]public AudioClip AnalyzingCommandAudio { get; private set; }
 
@@ -45,5 +48,11 @@ public class Aberration : MonoBehaviour
             scale = transform.lossyScale,
             id = (int)Type
         };
+    }
+
+    private void OnDestroy()
+    {
+        //For when you destroy an aberration in the scene view
+        FindObjectOfType<Aberrations>()?.RequestRecacheAberrations();
     }
 }

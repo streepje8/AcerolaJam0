@@ -28,7 +28,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _AberrationBTex:
-        m_Texture: {fileID: 2800000, guid: 14c8951e5127d4f41a948ceeff0da5a6, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2b56fa5b0ad9fe84d955776c2b3e046c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _AberrationCTex:
@@ -36,11 +36,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _AberrationDTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: ab820cb02ef4d994e9abb53d4b8cde69, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _AberrationETex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 80bc8a0ce0db4c844a4b1bd11590a892, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:

@@ -21,7 +21,7 @@ float sdRoundBox(float3 p, float3 b, float r )
 
 float sdBoxFrame(float3 p, float3 b, float e )
 {
-	p = abs(p  )-b;
+	p = abs(p)-b;
 	float3 q = abs(p+e)-e;
 	return min(min(
 		length(max(float3(p.x,q.y,q.z),0.0))+min(max(p.x,max(q.y,q.z)),0.0),
@@ -45,6 +45,20 @@ float sdOctahedron(float3 p, float s)
 {
   p = abs(p);
   return (p.x+p.y+p.z-s)*0.57735027;
+}
+
+float sdBox(float2 p, float2 b)
+{
+	float2 q = abs(p) - b;
+	return length(max(q,0.0)) + min(max(q.x,q.y),0.0);
+}
+
+float sdCross(float3 p)
+{
+	float da = sdBox(p.xy,float2(1.0,1.0));
+	float db = sdBox(p.yz,float2(1.0,1.0));
+	float dc = sdBox(p.zx,float2(1.0,1.0));
+	return min(da,min(db,dc));
 }
 
 //Combiners from iquellez
@@ -132,3 +146,36 @@ float3 opCheapBend(float3 p, float k)
 	float3 q = float3(mul(m,p.xy),p.z);
 	return q;
 }
+
+//From https://www.shadertoy.com/view/fdjGRD
+float3x3 RotateX(float theta) {
+	float c = cos(theta);
+	float s = sin(theta);
+	return float3x3(1, 0, 0,
+		0, c, -s,
+		0, s, c
+	);
+}
+
+float3x3 RotateY(float theta) {
+	float c = cos(theta);
+	float s = sin(theta);
+	return float3x3(c, 0, s,
+		0, 1, 0,
+		-s, 0, c
+	);
+}
+
+float3x3 RotateZ(float theta) {
+	float c = cos(theta);
+	float s = sin(theta);
+	return float3x3(c, -s, 0,
+		s, c, 0,
+		0, 0, 1
+	);
+}
+
+float3 RotateXYZ(float3 p, float thetaX, float thetaY, float thetaZ) {
+	return mul(RotateX(thetaX),mul(RotateY(thetaY),mul(p, RotateZ(thetaZ))));
+}
+

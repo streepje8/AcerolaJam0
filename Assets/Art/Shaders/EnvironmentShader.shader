@@ -108,32 +108,41 @@ Shader "Unlit/EnvironmentShader"
                 return opSmoothSubtraction(dstA,sdBox(p,float3(1.5,1.5,1.5)),1);
             }
 
+            #define TWO_PI 6.28318530718
+
             float AberrationD(float3 p)
             {
-                float boundingSphere = sdSphere(p, 2);
-                if(boundingSphere > 1) return boundingSphere;
-                float dstA = sdSphere(p - float3(sin(_Time.y),sin(_Time.z * 0.25),sin(_Time.y * 2)), 0.2);
-                float dstB = sdSphere(p - float3(sin(_Time.y * 0.25),sin(_Time.y * 2),sin(_Time.z)), 0.2);
-                float dstC = sdSphere(p, 0.4);
-                float combinedDst = opSmoothUnion(dstA,opSmoothUnion(dstB,dstC,1.5),1.5);
-                return combinedDst;
+                float boundingSphere = sdSphere(p, 6);
+                if(boundingSphere > 0.2) return boundingSphere;
+                
+                float dst = sdBoxFrame(RotateXYZ(p,fmod(_Time.y, TWO_PI),fmod(_Time.y, TWO_PI),fmod(_Time.y, TWO_PI)), float3(1,1,1) * 0.75, 0.075 * 0.75);
+                dst = opSmoothUnion(dst, sdOctahedron(p,1), 0.5);
+                return dst;
             }
+
+            #define DEG_TO_RAD 0.01745329251
 
             float AberrationE(float3 p)
             {
                 float boundingSphere = sdSphere(p, 2);
                 if(boundingSphere > 1) return boundingSphere;
-                float dstA = sdSphere(p - float3(sin(_Time.y),sin(_Time.z * 0.25),sin(_Time.y * 2)), 0.2);
-                float dstB = sdSphere(p - float3(sin(_Time.y * 0.25),sin(_Time.y * 2),sin(_Time.z)), 0.2);
-                float dstC = sdSphere(p, 0.4);
-                float combinedDst = opSmoothUnion(dstA,opSmoothUnion(dstB,dstC,1.5),1.5);
-                return combinedDst;
+
+                float dst = sdTorus(RotateXYZ(p + float3(0.3,0.3,0), -_Time.y,_Time.y,0), float2(0.5, 0.25 * 0.5));
+                dst = opSmoothUnion(dst,sdTorus(RotateXYZ(p - float3(0.3,-0.3,0), _Time.y,-_Time.y,0), float2(0.5, 0.25 * 0.5)), 0.2);
+                dst = opSmoothUnion(dst,sdTorus(RotateXYZ(p - float3(0,0.3,0), _Time.y,0,90 * DEG_TO_RAD), float2(0.5, 0.25 * 0.5)), 0.2);
+                dst = opSmoothSubtraction(sdSphere(p,0.55),dst, 0.2);
+                dst = min(dst, sdSphere(p, 0.3));
+                dst = min(dst, sdBoxFrame(p, float3(1,1,1), 0.1));
+                float ocs = sdOctahedron(opLimitedRepetition(p, float3(0.5,0.5,0.5),1), 0.1);
+                dst = opSmoothUnion(dst, ocs, 0.1);
+                return dst;
             }
             
-            float2 SceneSDF(float3 p)
+            float3 SceneSDF(float3 p)
             {
                 float dst = 10000;
                 int returnAberrationType = -1;
+                int returnAberrationIndex = -1;
                 for(int i = 0; i < _AberrationCount; i++)
                 {
                     float scale = _Aberrations[i].scale * 0.5;
@@ -148,9 +157,12 @@ Shader "Unlit/EnvironmentShader"
                         case 4: dst = min(dst,AberrationE(localP) * scale); break;
                         default: break;
                     }
-                    if(dst != oldDst) returnAberrationType = _Aberrations[i].id;
+                    if(dst != oldDst) {
+                        returnAberrationType = _Aberrations[i].id;
+                        returnAberrationIndex = i;
+                    }
                 }
-                return float2(dst, returnAberrationType);
+                return float3(dst, returnAberrationType, returnAberrationIndex);
             }
 
             float3 SceneNormal(float3 p)
@@ -185,14 +197,16 @@ Shader "Unlit/EnvironmentShader"
                 bool hit = false;
                 float dotNL = 0;
                 int hitType = -1;
+                int hitIndex = -1;
                 for(int i = 0; i < 500; i++)
                 {
                     float3 p = rayOrigin + rayDir * travelled;
-                    float2 dt = SceneSDF(p);
-                    float d = dt.x;
+                    float3 dti = SceneSDF(p);
+                    float d = dti.x;
                     if(d < 0.001f)
                     {
-                        hitType = int(dt.y);
+                        hitIndex = int(dti.z);
+                        hitType = int(dti.y);
                         float3 normal = SceneNormal(p);
                         dotNL = dot(normal, _WorldSpaceLightPos0) * 0.5 + 0.5;
                         float finalDepth = LinearToDepth(distance(p, rayOrigin + rayDir * 0.02));
@@ -209,11 +223,11 @@ Shader "Unlit/EnvironmentShader"
                 }
                 switch(hitType)
                 {
-                    case 0: col.rgb = tex2D(_AberrationATex, float2(dotNL, 0.5)).rgb; break;
-                    case 1: col.rgb = tex2D(_AberrationBTex, float2(dotNL, 0.5)).rgb; break;
-                    case 2: col.rgb = tex2D(_AberrationCTex, float2(dotNL, 0.5)).rgb; break;
-                    case 3: col.rgb = tex2D(_AberrationDTex, float2(dotNL, 0.5)).rgb; break;
-                    case 4: col.rgb = tex2D(_AberrationETex, float2(dotNL, 0.5)).rgb; break;
+                    case 0: col.rgb = lerp(tex2D(_AberrationATex, float2(dotNL, 0.5)).rgb, col.rgb, pow(clamp(distance(_Aberrations[hitIndex].position, _WorldSpaceCameraPos) / 250,0,1),2)); break;
+                    case 1: col.rgb = lerp(tex2D(_AberrationBTex, float2(dotNL, 0.5)).rgb, col.rgb, pow(clamp(distance(_Aberrations[hitIndex].position, _WorldSpaceCameraPos) / 250,0,1),2)); break;
+                    case 2: col.rgb = lerp(tex2D(_AberrationCTex, float2(dotNL, 0.5)).rgb, col.rgb, pow(clamp(distance(_Aberrations[hitIndex].position, _WorldSpaceCameraPos) / 250,0,1),2)); break;
+                    case 3: col.rgb = lerp(tex2D(_AberrationDTex, float2(dotNL, 0.5)).rgb, col.rgb, pow(clamp(distance(_Aberrations[hitIndex].position, _WorldSpaceCameraPos) / 250,0,1),2)); break;
+                    case 4: col.rgb = lerp(tex2D(_AberrationETex, float2(dotNL, 0.5)).rgb, col.rgb, pow(clamp(distance(_Aberrations[hitIndex].position, _WorldSpaceCameraPos) / 250,0,1),2)); break;
                     default: break;
                 }
                 float glow = stepCount / 30.0f;

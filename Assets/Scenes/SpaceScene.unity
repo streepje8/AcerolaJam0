@@ -270,6 +270,8 @@ Transform:
   - {fileID: 550462314}
   - {fileID: 338541888}
   - {fileID: 284518789}
+  - {fileID: 1793128389}
+  - {fileID: 909281285}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &108311716
@@ -5481,6 +5483,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 2
+  <AberrationName>k__BackingField: 
   <NavigationCommandAudio>k__BackingField: {fileID: 8300000, guid: 09badd74768892a4393fb9eab064d1e1, type: 3}
   <AnalyzingCommandAudio>k__BackingField: {fileID: 8300000, guid: 3398d86f0222b064a8c2f24d71206b6f, type: 3}
 --- !u!1 &338541887
@@ -5550,6 +5553,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 1
+  <AberrationName>k__BackingField: 
   <NavigationCommandAudio>k__BackingField: {fileID: 8300000, guid: 09badd74768892a4393fb9eab064d1e1, type: 3}
   <AnalyzingCommandAudio>k__BackingField: {fileID: 8300000, guid: 3398d86f0222b064a8c2f24d71206b6f, type: 3}
 --- !u!1 &339632000
@@ -5716,6 +5720,7 @@ MonoBehaviour:
   - {fileID: 550462316}
   - {fileID: 338541890}
   - {fileID: 284518791}
+  - {fileID: 1793128391}
   <ObjectiveText>k__BackingField: {fileID: 1714001552}
 --- !u!4 &521746385
 Transform:
@@ -5895,6 +5900,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 0
+  <AberrationName>k__BackingField: 
   <NavigationCommandAudio>k__BackingField: {fileID: 8300000, guid: 09badd74768892a4393fb9eab064d1e1, type: 3}
   <AnalyzingCommandAudio>k__BackingField: {fileID: 8300000, guid: 3398d86f0222b064a8c2f24d71206b6f, type: 3}
 --- !u!1 &705507993
@@ -6112,6 +6118,76 @@ Transform:
   m_Children: []
   m_Father: {fileID: 402772219}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &909281284
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 909281285}
+  - component: {fileID: 909281287}
+  - component: {fileID: 909281286}
+  m_Layer: 7
+  m_Name: AberrationE
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &909281285
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909281284}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -173, y: 107, z: 482}
+  m_LocalScale: {x: 25, y: 25, z: 25}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 108311715}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &909281286
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909281284}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &909281287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909281284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ae8e007f597109449a756dd1f9d0961, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Type>k__BackingField: 4
+  <AberrationName>k__BackingField: 
+  <NavigationCommandAudio>k__BackingField: {fileID: 8300000, guid: 09badd74768892a4393fb9eab064d1e1, type: 3}
+  <AnalyzingCommandAudio>k__BackingField: {fileID: 8300000, guid: 3398d86f0222b064a8c2f24d71206b6f, type: 3}
 --- !u!1 &946263993
 GameObject:
   m_ObjectHideFlags: 0
@@ -12079,6 +12155,76 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1714001550}
   m_CullTransparentMesh: 1
+--- !u!1 &1793128388
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1793128389}
+  - component: {fileID: 1793128391}
+  - component: {fileID: 1793128390}
+  m_Layer: 7
+  m_Name: AberrationD
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1793128389
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1793128388}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -78.6, y: -42.2, z: -206.7}
+  m_LocalScale: {x: 25, y: 25, z: 25}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 108311715}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1793128390
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1793128388}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1793128391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1793128388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ae8e007f597109449a756dd1f9d0961, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Type>k__BackingField: 3
+  <AberrationName>k__BackingField: 
+  <NavigationCommandAudio>k__BackingField: {fileID: 8300000, guid: 09badd74768892a4393fb9eab064d1e1, type: 3}
+  <AnalyzingCommandAudio>k__BackingField: {fileID: 8300000, guid: 3398d86f0222b064a8c2f24d71206b6f, type: 3}
 --- !u!1 &1810500858
 GameObject:
   m_ObjectHideFlags: 0
