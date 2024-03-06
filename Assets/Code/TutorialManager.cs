@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public enum TutorialFase
@@ -12,7 +13,9 @@ public enum TutorialFase
     ForwardThrust,
     Instrumentation,
     TurnInstruction,
-    PitchInstruction
+    PitchInstruction,
+    FinalTest,
+    WaitAndExit
 }
 
 [RequireComponent(typeof(AudioSource))]
@@ -38,6 +41,7 @@ public class TutorialManager : MonoBehaviour
     {
         source = GetComponent<AudioSource>();
         pRb = Player.GetComponent<Rigidbody>();
+        rotationLockXY = true;
         if(ThatOneSpecialWall != null) ThatOneSpecialWall.gameObject.SetActive(true);
     }
 
@@ -60,7 +64,9 @@ public class TutorialManager : MonoBehaviour
     private bool flagA = false;
     private bool flagB = false;
     private bool flagC = false;
-    private bool rotationLock = false;
+    private bool rotationLockXZ = false;
+    private bool rotationLockXY = false;
+    private int specialRegionIndex = 0;
     
     //YES the tutorial is entirely hardcoded because i need to save some time 0-o
     void Update()
@@ -79,6 +85,7 @@ public class TutorialManager : MonoBehaviour
                             timer = 0;
                             PlayNextInstruction();
                             Areas[0]?.SetActive(true);
+                            rotationLockXY = true;
                             CurrentFase = TutorialFase.RollInstruction;
                         }
                     }
@@ -150,6 +157,7 @@ public class TutorialManager : MonoBehaviour
                         flagA = false;
                         flagB = false;
                         if(ThatOneSpecialWall != null) ThatOneSpecialWall.gameObject.SetActive(false);
+                        Navigation.Instance.NavigateTo(Regions[0].bounds.center);
                         CurrentFase = TutorialFase.ForwardThrust;
                     }
                 }
@@ -183,7 +191,9 @@ public class TutorialManager : MonoBehaviour
                         timer = 0;
                         flagA = false;
                         flagB = false;
-                        rotationLock = true;
+                        rotationLockXY = false;
+                        rotationLockXZ = true;
+                        Navigation.Instance.NavigateTo(Regions[1].bounds.center);
                         CurrentFase = TutorialFase.TurnInstruction;
                     }
                 }
@@ -220,7 +230,8 @@ public class TutorialManager : MonoBehaviour
                         flagA = false;
                         flagB = false;
                         flagC = false;
-                        rotationLock = false;
+                        rotationLockXZ = false;
+                        Navigation.Instance.NavigateTo(Regions[2].bounds.center);
                         CurrentFase = TutorialFase.PitchInstruction;
                     }
                 }
@@ -229,7 +240,7 @@ public class TutorialManager : MonoBehaviour
                     if (flagA)
                     {
                         if(!flagC)timerTwo += Time.deltaTime;
-                        if (timerTwo > 10)
+                        if (timerTwo > 20)
                         {
                             timerTwo = 0;
                             PlayNextInstruction();
@@ -261,8 +272,10 @@ public class TutorialManager : MonoBehaviour
                         timer = 0;
                         flagA = false;
                         flagB = false;
-                        rotationLock = false;
-                        CurrentFase = TutorialFase.PitchInstruction;
+                        rotationLockXZ = false;
+                        specialRegionIndex = 3;
+                        Navigation.Instance.NavigateTo(Regions[3].bounds.center);
+                        CurrentFase = TutorialFase.FinalTest;
                     }
                 }
                 else
@@ -285,13 +298,74 @@ public class TutorialManager : MonoBehaviour
                     }
                 }
                 break;
+            case TutorialFase.FinalTest:
+                if (flagB)
+                {
+                    if (!source.isPlaying)
+                    {
+                        //ToggleNextArea();
+                        PlayNextInstruction();
+                        timer = 0;
+                        flagA = false;
+                        flagB = false;
+                        rotationLockXZ = false;
+                        specialRegionIndex = 3;
+                        Navigation.Instance.NavigateTo(Regions[3].bounds.center);
+                        CurrentFase = TutorialFase.WaitAndExit;
+                    }
+                }
+                else
+                {
+                    if (flagA)
+                    {
+                        if (Regions[specialRegionIndex].bounds.Contains(Player.transform.position)) timer += Time.deltaTime;
+                        if (timer > 6)
+                        {
+                            PlayComplement();
+                            timer = 0;
+                            if (specialRegionIndex < (Regions.Count - 1))
+                            {
+                                Regions[specialRegionIndex].gameObject.SetActive(false);
+                                specialRegionIndex++;
+                                Regions[specialRegionIndex].gameObject.SetActive(true);
+                                Navigation.Instance.NavigateTo(Regions[specialRegionIndex].bounds.center);
+                            }
+                            else
+                            {
+                                flagB = true;
+                            }
+                        }
+                    } else {
+                        timer += Time.deltaTime;
+                        if (timer > 2)
+                        {
+                            flagA = true;
+                            timer = 0;
+                        }
+                    }
+                }
+                break;
+            case TutorialFase.WaitAndExit:
+                timer += Time.deltaTime;
+                if (!flagA && timer > 5)
+                {
+                    flagA = true;
+                    SceneManager.LoadSceneAsync(0);
+                }
+                break;
         }
 
     }
 
     private void FixedUpdate()
     {
-        if (rotationLock)
+        if (rotationLockXY)
+        {
+            Quaternion newRotation = Quaternion.Euler(0,0,Player.transform.rotation.eulerAngles.z);
+            pRb.MoveRotation(newRotation);
+            Player.rotation = newRotation;
+        }
+        if (rotationLockXZ)
         {
             Quaternion newRotation = Quaternion.Euler(0,Player.transform.rotation.eulerAngles.y,0);
             pRb.MoveRotation(newRotation);
