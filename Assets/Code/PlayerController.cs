@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviour
     [field: SerializeField] public Transform RollRUpEngine { get; private set; }
     [field: SerializeField] public Transform RollLDownEngine { get; private set; }
     [field: SerializeField] public Transform RollRDownEngine { get; private set; }
+    [field: SerializeField] public AudioSource EngineAudio { get; private set; }
     private Rigidbody rb;
     
     void Awake()
@@ -60,6 +61,9 @@ public class PlayerController : MonoBehaviour
     private Queue<Command> commands = new Queue<Command>();
     private float trustDirection = 0;
     private float upDownDirection = 0;
+    
+    private float lastThrust = 0;
+    private float normalizedThrust = 0;
     void Update()
     {
         trustDirection = Mathf.Lerp(trustDirection, -(Input.GetKey(Controls.LEFT) ? 1 : 0) + (Input.GetKey(Controls.RIGHT) ? 1 : 0), 3f * Time.deltaTime);
@@ -76,6 +80,12 @@ public class PlayerController : MonoBehaviour
         {
             if(!commands.Contains(Command.RollRight)) commands.Enqueue(Command.RollRight);  
         }
+
+        lastThrust = Mathf.Lerp(lastThrust, 0, 0.5f * Time.deltaTime);
+        
+        normalizedThrust = Mathf.Lerp(normalizedThrust,lastThrust / (EngineTrustAmount * Time.fixedDeltaTime), 10f * Time.deltaTime);
+        EngineAudio.volume = Mathf.Lerp(0.1f, 0.4f, normalizedThrust);
+        EngineAudio.pitch = Mathf.Lerp(0.6f, 2.0f, normalizedThrust);
     }
 
     private void FixedUpdate()
@@ -112,6 +122,7 @@ public class PlayerController : MonoBehaviour
 
     private void EngineTrust(Transform engine, float amount)
     {
+        lastThrust = Mathf.Max(lastThrust, amount);
         rb.AddForceAtPosition(engine.forward * (amount * 100f), engine.position);
     }
 }
