@@ -42,7 +42,7 @@ public class Aberrations : MonoBehaviour
         }
         
         aberrations = GetComponentsInChildren<Aberration>().ToList();
-        aberrationBuffer = new ComputeBuffer(aberrations.Count, Marshal.SizeOf(typeof(AberrationStruct)));
+        if(aberrations.Count > 0) aberrationBuffer = new ComputeBuffer(aberrations.Count, Marshal.SizeOf(typeof(AberrationStruct)));
     }
 
     private void Update()
