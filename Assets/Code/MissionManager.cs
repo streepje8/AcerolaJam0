@@ -50,12 +50,6 @@ public class MissionManager : MonoBehaviour
     private void Start()
     {
         GenerateMissions();
-        NextMission();
-    }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Space)) NextMission();
     }
 
     public void GenerateMissions()

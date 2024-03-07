@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -319,7 +318,7 @@ public class TutorialManager : MonoBehaviour
                     if (flagA)
                     {
                         if (Regions[specialRegionIndex].bounds.Contains(Player.transform.position)) timer += Time.deltaTime;
-                        if (timer > 6)
+                        if (timer > 3)
                         {
                             PlayComplement();
                             timer = 0;
