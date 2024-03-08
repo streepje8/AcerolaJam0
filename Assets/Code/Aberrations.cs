@@ -7,6 +7,9 @@ using UnityEngine;
 public class Aberrations : MonoBehaviour
 {
     [field: SerializeField]public Material SkyMaterial { get; private set; }
+    public static List<Aberration> AllAberrations => Instance.aberrations;
+    
+    private static Aberrations Instance { get; set; }
 
     private List<Aberration> aberrations = new List<Aberration>();
     
@@ -16,6 +19,7 @@ public class Aberrations : MonoBehaviour
 
     private void OnEnable()
     {
+        Instance = this;
         RecacheAberrations();
     }
     

@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 30b62b81da9ba794db8119d1f4ff0d78, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -149,7 +149,7 @@ AudioSource:
   m_GameObject: {fileID: 319515732}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 6a9524305d5fc2f42a19dcef8ee2d891, type: 2}
   m_audioClip: {fileID: 8300000, guid: 0e76f9baa4551784eb2278b3fcfa0543, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.15
@@ -868,7 +868,7 @@ AudioSource:
   m_GameObject: {fileID: 1496800648}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 6a9524305d5fc2f42a19dcef8ee2d891, type: 2}
   m_audioClip: {fileID: 8300000, guid: d1002364d126ecc4598a3b20682aeae0, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -1489,7 +1489,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1000, y: 1000, z: 1000}
+  m_LocalScale: {x: 700, y: 700, z: 700}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

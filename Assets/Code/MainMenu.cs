@@ -28,7 +28,7 @@ public class MainMenu : MonoBehaviour
         fadeOut = true;
     }
 
-    public void Quit()
+    public void QuitGame()
     {
         source.PlayOneShot(ButtonSound);
         fadeOut = true;

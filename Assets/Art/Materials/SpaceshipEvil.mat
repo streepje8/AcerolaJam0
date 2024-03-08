@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SpaceshipEvil
+  m_Shader: {fileID: 4800000, guid: 1e85219c202777644afe405786b0224a, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 561fea2d0c84fd541b22432554849b20, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TEXA:
+        m_Texture: {fileID: 2800000, guid: c3953f635f3de124c9520bf34b9a53df, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TEXB:
+        m_Texture: {fileID: 2800000, guid: 1f978d2eb25274441b0de01b8646bbfb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TEXC:
+        m_Texture: {fileID: 2800000, guid: b1d1ae698974ee4498247ff188d5a48d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TEXTURE:
+        m_Texture: {fileID: 2800000, guid: 917316b1aa0c7ac4d92754a6758cd3d3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _OutlineWidth: 0.248
+    m_Colors:
+    - _EngineColor: {r: 16, g: 3.5469065, b: 0, a: 1}
+    - _OutlineColor: {r: 1.5157166, g: 1.5157166, b: 1.5157166, a: 1}
+    - _ShipColor: {r: 0.03660578, g: 0.03538623, b: 0.03773582, a: 1}
+    - _WindowColor: {r: 0.39245272, g: 4, b: 3.6979969, a: 1}
+  m_BuildTextureStacks: []

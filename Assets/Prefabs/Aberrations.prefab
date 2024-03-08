@@ -96,9 +96,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 0
-  <AberrationName>k__BackingField: 
-  <NavigationCommandAudio>k__BackingField: {fileID: 8300000, guid: 09badd74768892a4393fb9eab064d1e1, type: 3}
-  <AnalyzingCommandAudio>k__BackingField: {fileID: 8300000, guid: 3398d86f0222b064a8c2f24d71206b6f, type: 3}
+  <AberrationName>k__BackingField: Kazyto
+  <NavigationCommandAudio>k__BackingField: {fileID: 8300000, guid: 8bd55c9510d123047aca4db84d2b9dab, type: 3}
+  <AnalyzingCommandAudio>k__BackingField: {fileID: 8300000, guid: d6702e0aa4a690c45989904a66e59afa, type: 3}
 --- !u!65 &6511980808232483658
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -166,9 +166,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 4
-  <AberrationName>k__BackingField: 
-  <NavigationCommandAudio>k__BackingField: {fileID: 8300000, guid: 09badd74768892a4393fb9eab064d1e1, type: 3}
-  <AnalyzingCommandAudio>k__BackingField: {fileID: 8300000, guid: 3398d86f0222b064a8c2f24d71206b6f, type: 3}
+  <AberrationName>k__BackingField: Tyzorb
+  <NavigationCommandAudio>k__BackingField: {fileID: 8300000, guid: 6c21c1bedf92e3640ae824245f46ddee, type: 3}
+  <AnalyzingCommandAudio>k__BackingField: {fileID: 8300000, guid: d6702e0aa4a690c45989904a66e59afa, type: 3}
 --- !u!65 &7220931911401945804
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -236,9 +236,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 3
-  <AberrationName>k__BackingField: 
-  <NavigationCommandAudio>k__BackingField: {fileID: 8300000, guid: 09badd74768892a4393fb9eab064d1e1, type: 3}
-  <AnalyzingCommandAudio>k__BackingField: {fileID: 8300000, guid: 3398d86f0222b064a8c2f24d71206b6f, type: 3}
+  <AberrationName>k__BackingField: Pinky
+  <NavigationCommandAudio>k__BackingField: {fileID: 8300000, guid: 25a5807cb297b39488705f975d59e0c7, type: 3}
+  <AnalyzingCommandAudio>k__BackingField: {fileID: 8300000, guid: d6702e0aa4a690c45989904a66e59afa, type: 3}
 --- !u!65 &2595743603475490105
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -306,9 +306,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 2
-  <AberrationName>k__BackingField: 
-  <NavigationCommandAudio>k__BackingField: {fileID: 8300000, guid: 09badd74768892a4393fb9eab064d1e1, type: 3}
-  <AnalyzingCommandAudio>k__BackingField: {fileID: 8300000, guid: 3398d86f0222b064a8c2f24d71206b6f, type: 3}
+  <AberrationName>k__BackingField: AFX
+  <NavigationCommandAudio>k__BackingField: {fileID: 8300000, guid: aa12fa7035df97a44b006f5c4336abb4, type: 3}
+  <AnalyzingCommandAudio>k__BackingField: {fileID: 8300000, guid: d6702e0aa4a690c45989904a66e59afa, type: 3}
 --- !u!65 &972541392677707369
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -376,9 +376,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 1
-  <AberrationName>k__BackingField: 
-  <NavigationCommandAudio>k__BackingField: {fileID: 8300000, guid: 09badd74768892a4393fb9eab064d1e1, type: 3}
-  <AnalyzingCommandAudio>k__BackingField: {fileID: 8300000, guid: 3398d86f0222b064a8c2f24d71206b6f, type: 3}
+  <AberrationName>k__BackingField: Magus
+  <NavigationCommandAudio>k__BackingField: {fileID: 8300000, guid: 821437c114cf14b4684bf493a595e491, type: 3}
+  <AnalyzingCommandAudio>k__BackingField: {fileID: 8300000, guid: d6702e0aa4a690c45989904a66e59afa, type: 3}
 --- !u!65 &2579039182492120125
 BoxCollider:
   m_ObjectHideFlags: 0

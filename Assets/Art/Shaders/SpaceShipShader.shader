@@ -62,13 +62,13 @@ Shader "Unlit/SpaceShipShader"
                 fixed4 col = 0;
                 float lightVal = dot(i.normal, _WorldSpaceLightPos0) * 0.5 + 0.5;
                 lightVal = floor(lightVal * 10) / 10;
-                col += round(mask.r) * _ShipColor; //tex2D(_TEXTURE, i.uv).r
-                col += round(mask.g) * tex2D(_TEXTURE, i.uv).g * _WindowColor;
+                col += round(mask.r) * _ShipColor * lightVal; //tex2D(_TEXTURE, i.uv).r
+                col += round(mask.g) * tex2D(_TEXTURE, i.uv).g * _WindowColor * lightVal;
                 float offsetA = tex2D(_TEXTURE, i.uv + float2(_Time.x,-_Time.x)).r;
                 float offsetB = tex2D(_TEXTURE, i.uv + float2(_Time.x,-_Time.x) * 0.5).r;
                 col += round(mask.b) * (tex2D(_TEXTURE, i.uv + float2(offsetA,offsetB)).b * _EngineColor);
                 UNITY_APPLY_FOG(i.fogCoord, col);
-                return col * lightVal;
+                return col;
             }
             ENDCG
         }
